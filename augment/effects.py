@@ -206,16 +206,16 @@ class EffectChain:
             noise_generator=noise_generator, snr=snr))
         return self
 
-    def clip(self, factor_generator: Callable):
+    def clip(self, clamp_factor: Union[Callable, float]):
         """
         >>> signal = torch.tensor([-10, -5, 0, 5, 10]).float()
-        >>> factor_generator = lambda: 0.5
+        >>> factor_generator = 0.5
         >>> chain = EffectChain().clip(factor_generator)
         >>> x = chain.apply(signal, {'rate': 16000}, {})
         >>> x
         tensor([[-5., -5.,  0.,  5.,  5.]])
         """
-        self._chain.append(ClipValue(factor_generator))
+        self._chain.append(ClipValue(clamp_factor))
         return self
 
 
@@ -258,11 +258,11 @@ class AdditiveNoise:
 
 
 class ClipValue:
-    def __init__(self, value_generator: Callable):
-        self.value_generator = value_generator
+    def __init__(self, clamp_factor: Union[Callable, float]):
+        self.clamp_factor = clamp_factor
 
     def __call__(self, x, src_info, dst_info):
-        factor = self.value_generator()
+        factor = self.clamp_factor() if callable(self.clamp_factor) else self.clamp_factor
         x_min, x_max = x.min(), x.max()
 
         x.clamp_(min=x_min * factor, max=x_max * factor)

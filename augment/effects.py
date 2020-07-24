@@ -3,12 +3,11 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-from typing import Dict, List, Optional, Callable, Union, Tuple
+from typing import Dict, List, Optional, Callable, Union, Tuple, Set
 
 import torch
 import numpy as np
 import augment_cpp as _augment
-
 
 def shutdown_sox() -> None:
     _augment.shutdown_sox()
@@ -60,6 +59,7 @@ class EffectChain:
     # while torchaudio operates with [-1, 1]. Hence,
     # each time we pass something to/from libsox, we rescale
     _NORMALIZER: int = 1 << 31
+    KNOWN_EFFECTS: Set[str] = set()
 
     def __init__(self, in_place: bool = False):
         self._chain: List[Union[Callable, SoxEffect]] = []
@@ -219,6 +219,10 @@ class EffectChain:
         self._chain.append(ClipValue(clamp_factor))
         return self
 
+    KNOWN_EFFECTS.add('additive_noise')
+    KNOWN_EFFECTS.add('clip')
+    KNOWN_EFFECTS.add('time_dropout')
+
 
 class TimeDropout:
     def __init__(self, max_frames: Optional[int] = None, max_seconds: Optional[float] = None):
@@ -271,6 +275,7 @@ class ClipValue:
 
 
 def create_method(name):
+    EffectChain.KNOWN_EFFECTS.add(name)
     return lambda s, *x: s._append_effect_to_chain(name, list(x)) # pylint: disable=protected-access
 
 

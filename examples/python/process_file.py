@@ -81,7 +81,7 @@ def augmentation_factory(description, sampling_rate, args):
             randomized_params = RandomReverb(args.reverberance_min, args.reverberance_max, 
                                 args.damping_min, args.damping_max, args.room_scale_min, args.room_scale_max)
             chain = chain.reverb(randomized_params).channels()
-        elif effect == 'dropout':
+        elif effect == 'time_drop':
             chain = chain.time_dropout(max_seconds=args.t_ms / 1000.0)
         elif effect == 'clip':
             chain = chain.clip(RandomClipFactor(args.clip_min, args.clip_max))
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     x, sampling_rate = torchaudio.load(args.input_file)
     augmentation_chain = augmentation_factory(args.chain, sampling_rate, args)
 
-    y, _ = augmentation_chain.apply(x, 
+    y = augmentation_chain.apply(x, 
             src_info=dict(rate=sampling_rate, length=x.size(1), channels=x.size(0)),
             target_info=dict(rate=sampling_rate, length=0)
     )

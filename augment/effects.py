@@ -99,7 +99,7 @@ class EffectChain:
     def apply(self,
               input_tensor: torch.Tensor,
               src_info: Dict[str, Union[int, float]],
-              target_info: Dict[str, Union[int, float]]) -> torch.Tensor:
+              target_info: Optional[Dict[str, Union[int, float]]] = None) -> torch.Tensor:
         """
         input_tensor (torch.Tensor): the input wave to be transformed;
             expected shape is (n_channels, length). If it has only
@@ -124,6 +124,7 @@ class EffectChain:
 
         returns: torch.Tensor with transformed sound.
         """
+        target_info = dict() if target_info is None else target_info
 
         if not torch.is_tensor(input_tensor) or input_tensor.is_cuda:
             raise RuntimeError('Expected a CPU tensor')

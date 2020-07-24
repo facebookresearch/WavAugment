@@ -14,7 +14,7 @@ python process_file.py --input_file=./tests/test.wav \
     --pitch_shift_max=500 \ 
     --t_ms=100
 ```
-where `--chain` speccifies a list of augmentations applied sequentially, left-to-right; `t_ms` and `pitch_shift_max` specify parameters of the augmentations. `augmented.wav` would contain the randomly augmented sound.
+where `--chain` specifies a list of augmentations applied sequentially, left-to-right; `t_ms` and `pitch_shift_max` specify parameters of the augmentations. `augmented.wav` would contain the randomly augmented sound.
 
 
 ## Usage in self-supervised learning

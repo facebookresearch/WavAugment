@@ -2,6 +2,10 @@
 
 In this directory, we provide a couple of examples, described below.
 
+## Walkthrough tutorial
+
+[WavAugment_walkthrough.ipynb](./examples/python/WavAugment_walkthrough.ipynb) [(open in colab)](https://colab.research.google.com/github/facebookresearch/WavAugment/blob/master/examples/python/WavAugment_walkthrough.ipynb) provides a succint walkthrough tutorial, showing how effects can be applied on a piece of speech (recorded over the mic or pre-recorded).
+
 ## Processing a single file
 
 The script [process_file.py](./process_file.py) gives a taste on how different compositions of speech augmentation techniques sound like, by allowing to augment single files.  It suppors a few randomized data augmentations: pitch, reverberation, temporal masking, band rejection, and clipping.

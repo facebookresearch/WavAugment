@@ -36,7 +36,7 @@ python -m pytest -v --doctest-modules
 
 ## Usage
 
-First of all, we provide thouroughly documented [examples](./examples/python), where we demonstrate how a data-augmented dataset interface works.
+First of all, we provide thouroughly documented [examples](./examples/python), where we demonstrate how a data-augmented dataset interface works. We also provide a Jupyter-based [tutorial](./examples/python/WavAugment_walkthrough.ipynb) [(open in colab)](https://colab.research.google.com/github/facebookresearch/WavAugment/blob/master/examples/python/WavAugment_walkthrough.ipynb) that illlustrates how one can apply various useful effects to a piece of speech (recorded over the mic or pre-recorded).
 
 ### The `EffectChain`
 

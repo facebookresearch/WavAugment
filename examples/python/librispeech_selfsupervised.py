@@ -110,7 +110,7 @@ class ChainRunner:
                        'rate': 16000.0,
                        'bits_per_sample': 32}
 
-        y, sampling_rate = self.chain.apply(
+        y = self.chain.apply(
             x, src_info=src_info, target_info=target_info)
 
         # sox might misbehave sometimes by giving nan/inf if sequences are too short (or silent)

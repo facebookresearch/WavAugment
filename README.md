@@ -17,9 +17,9 @@ Among others, it implements the augmentations that we found to be most useful fo
 Internally, WavAugment uses [libsox](http://sox.sourceforge.net/libsox.html) and allows interleaving of libsox- and pytorch-based effects. 
 
 ### Requirements
- * Linux (WavAugment is not tested under MacOS and might not work properly);
- * [pytorch](pytorch.org) (however, there is also an option of using WavAugment directly from C++ w/o torch, see below);
- * `libsox`: if you have [torchaudio](https://github.com/pytorch/audio) installed, most likely you already have `libsox`. Otherwise, you need to install it, e.g. by running `sudo apt-get install sox libsox-dev libsox-fmt-all`
+ * Linux or MacOS
+ * [pytorch](pytorch.org) >= 1.7
+ * [torchaudio](pytorch.org/audio) >= 0.7
 
 ### Installation
 To install WavAugment, run the following command:
@@ -112,15 +112,6 @@ This output tells us that the `reverb` effect changes the number of channels, wh
 WavAugment remains explicit and doesn't add effects under the hood. 
 If you want to emulate a Sox command that decomposes into several effects, we advise to consult `sox -V` and apply the effects manually. 
 Try it out on some files before running a heavy machine-learning job. 
-
-## But I want to use it from C++
-### Installation
-It is possible to use directly WavAugment's C++ interface to libsox.
-You will need to install `libsox`, e.g. by running
-```bash
-sudo apt-get install sox libsox-dev libsox-fmt-all
-```
-The C++ interface is provided as a single-header library, so you only need to include [this file](./augment/speech_augment.h).
 
 ## Citation
 If you find WavAugment useful in your research, please consider citing:

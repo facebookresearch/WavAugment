@@ -153,4 +153,4 @@ def test_additive_noise():
     assert torch.allclose(x, y)
 
 def test_number_effects():
-    assert len(augment.EffectChain.KNOWN_EFFECTS) == 64
+    assert len(augment.EffectChain.KNOWN_EFFECTS) == 61

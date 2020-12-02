@@ -7,14 +7,28 @@ from typing import Dict, List, Optional, Callable, Union, Tuple, Set
 
 import torch
 import numpy as np
-import augment_cpp as _augment
+import torchaudio
+from torchaudio.sox_effects.sox_effects import effect_names as get_effect_names
 
 def shutdown_sox() -> None:
-    _augment.shutdown_sox()
+    pass
 
 
 # Arguments that we can pass to effects
 SoxArg = Optional[List[Union[str, int, Callable]]]
+
+
+class _PyEffectChain:
+
+    def __init__(self):
+        self._effects = []
+
+    def add_effect(self, effect_name, effect_params):
+        params = [str(e) for e in effect_params]
+        self._effects.append([effect_name, *params])
+
+    def apply_flow_effects(self, tensor, src_info, target_info):
+        return torchaudio.sox_effects.apply_effects_tensor(tensor, int(src_info['rate']), self._effects)
 
 
 class SoxEffect:
@@ -82,18 +96,13 @@ class EffectChain:
                            src_info: Dict,
                            target_info: Dict) -> Tuple[torch.Tensor, int]:
         instantiated_chain = [x.instantiate() for x in chain]
-        sox_chain = _augment.PyEffectChain()
+        sox_chain = _PyEffectChain()
         for effect_name, effect_args in instantiated_chain:
             sox_chain.add_effect(effect_name, effect_args)
 
-        input_tensor.mul_(EffectChain._NORMALIZER)
-
-        out = input_tensor
-        sr = sox_chain.apply_flow_effects(input_tensor,
-                                          out,
+        out, sr = sox_chain.apply_flow_effects(input_tensor,
                                           src_info,
                                           target_info)
-        out.div_(EffectChain._NORMALIZER)
         return out, sr
 
     def apply(self,
@@ -279,5 +288,5 @@ def create_method(name):
     return lambda s, *x: s._append_effect_to_chain(name, list(x)) # pylint: disable=protected-access
 
 
-for _effect_name in _augment.get_effect_names():
+for _effect_name in get_effect_names():
     setattr(EffectChain, _effect_name, create_method(_effect_name))

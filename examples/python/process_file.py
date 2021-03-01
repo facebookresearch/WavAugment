@@ -37,7 +37,7 @@ class RandomReverb:
     def __call__(self):
         reverberance = np.random.randint(self.reverberance_min, self.reverberance_max + 1)
         damping = np.random.randint(self.damping_min, self.damping_max + 1)
-        room_scale = np.random.randint(self.room_scale_min, self.room_scale_min + 1)
+        room_scale = np.random.randint(self.room_scale_min, self.room_scale_max + 1)
 
         return [reverberance, damping, room_scale]
 
